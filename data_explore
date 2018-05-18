@@ -1,0 +1,209 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+#Load data
+prk = pd.read_csv('C:\\Users\\veron\\Documents\\UNIVERSITY\\3 SEMESTER\\PYTHON\\AE\\prk_reord_bin.csv')
+p=np.array(prk)
+
+#Dataset summary
+prk.info()
+
+# del subject and motor_updrs columns
+p=prk.drop("subject#",  axis=1)
+p=p.drop("motor_UPDRS", axis=1) 
+
+
+prk.describe()
+prk.min()
+plt.scatter(prk["age"],prk["total_UPDRS"])
+plt.scatter(prk["test_time"],prk["total_UPDRS"])
+plt.scatter(prk["Jitter(%)"],prk["total_UPDRS"])
+plt.scatter(prk["Jitter(Abs)"],prk["total_UPDRS"])
+plt.scatter(prk["Jitter:RAP"],prk["total_UPDRS"])
+plt.scatter(prk["Jitter:PPQ5"],prk["total_UPDRS"])
+plt.scatter(prk["Jitter:DDP"],prk["total_UPDRS"])
+plt.scatter(prk["Shimmer"],prk["total_UPDRS"])
+plt.scatter(prk["Shimmer(dB)"],prk["total_UPDRS"])
+plt.scatter(prk["Shimmer:APQ3"],prk["total_UPDRS"])
+plt.scatter(prk["Shimmer:APQ5"],prk["total_UPDRS"])
+plt.scatter(prk["Shimmer:APQ11"],prk["total_UPDRS"])
+plt.scatter(prk["Shimmer:DDA"],prk["total_UPDRS"])
+plt.scatter(prk["NHR"],prk["total_UPDRS"])
+plt.scatter(prk["HNR"],prk["total_UPDRS"])
+plt.scatter(prk["RPDE"],prk["total_UPDRS"])
+plt.scatter(prk["DFA"],prk["total_UPDRS"])
+plt.scatter(prk["PPE"],prk["total_UPDRS"])
+
+# Outliers
+    
+import seaborn as sns
+sns.distplot(prk["age"])
+sns.distplot(prk["age"], bins=1)
+sns.distplot(prk["test_time"])
+sns.distplot(prk["Jitter(%)"])
+sns.distplot(prk["Jitter(Abs)"])
+sns.distplot(prk["Jitter:RAP"])
+sns.distplot(prk["Jitter:PPQ5"])
+sns.distplot(prk["Jitter:DDP"])
+sns.distplot(prk["Shimmer"])
+sns.distplot(prk["Shimmer(dB)"])
+sns.distplot(prk["Shimmer:APQ3"])
+sns.distplot(prk["Shimmer:APQ5"])
+sns.distplot(prk["Shimmer:APQ11"])
+sns.distplot(prk["NHR"])
+sns.distplot(prk["HNR"])
+sns.distplot(prk["RPDE"])
+sns.distplot(prk["DFA"])
+sns.distplot(prk["PPE"])
+sns.distplot(prk["total_UPDRS"])
+
+import matplotlib.pyplot as plt
+sex=sns.countplot(prk["sex"])
+show(sex)
+
+sns.boxplot(prk["age"])
+sns.boxplot(prk["test_time"])
+sns.boxplot(prk["Jitter(%)"])
+sns.boxplot(prk["Jitter(Abs)"])
+sns.boxplot(prk["Jitter:RAP"])
+sns.boxplot(prk["Jitter:PPQ5"])
+sns.boxplot(prk["Jitter:DDP"])
+sns.boxplot(prk["Shimmer"])
+sns.boxplot(prk["Shimmer(dB)"])
+sns.boxplot(prk["Shimmer:APQ3"])
+sns.boxplot(prk["Shimmer:APQ5"])
+sns.boxplot(prk["Shimmer:APQ11"])
+sns.boxplot(prk["NHR"])
+sns.boxplot(prk["HNR"])
+sns.boxplot(prk["RPDE"])
+sns.boxplot(prk["DFA"])
+sns.boxplot(prk["PPE"])
+sns.boxplot(prk["total_UPDRS"])
+
+from string import ascii_letters
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.set(style="white")
+
+# Generate a large random dataset
+rs = np.random.RandomState(33)
+d = pd.DataFrame(data=rs.normal(size=(100, 26)),
+                 columns=list(ascii_letters[26:]))
+
+# Compute the correlation matrix
+corr = prk.corr()
+
+# Generate a mask for the upper triangle
+mask = np.zeros_like(corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)] = True
+
+# Set up the matplotlib figure
+f, ax = plt.subplots(figsize=(11, 9))
+
+# Generate a custom diverging colormap
+cmap = sns.diverging_palette(220, 10, as_cmap=True)
+
+# Draw the heatmap with the mask and correct aspect ratio
+sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
+            square=True, linewidths=.5, cbar_kws={"shrink": .5})
+
+#correlation option 1
+from string import ascii_letters
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.set(style="white")
+
+# Compute the correlation matrix
+corr = prk.corr()
+
+# Generate a mask for the upper triangle
+mask = np.zeros_like(corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)] = True
+
+# Set up the matplotlib figure
+f, ax = plt.subplots(figsize=(11, 9))
+
+# Generate a custom diverging colormap
+cmap = sns.diverging_palette(500, 20, as_cmap=True)
+
+# Draw the heatmap with the mask and correct aspect ratio
+sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
+            square=True, linewidths=.5, cbar_kws={"shrink": .5})
+
+# corr option 2
+import seaborn as sns
+corr = prk.corr()
+plt.subplots(figsize=(11, 9))
+sns.heatmap(corr, 
+            xticklabels=corr.columns.values,
+            yticklabels=corr.columns.values)
+
+# corr option 3
+sns.heatmap(corr, vmax=1., square=False).xaxis.tick_()
+
+print(corr)
+
+p1=p.loc[:, "age":"Jitter(%)"]
+pd.tools.plotting.scatter_matrix(p1, diagonal="kde")
+plt.tight_layout()
+plt.show()
+
+# hinton corr
+# adapted from http://matplotlib.org/examples/specialty_plots/hinton_demo.html
+def hinton(matrix, max_weight=None, ax=None):
+    """Draw Hinton diagram for visualizing a weight matrix."""
+    ax = ax if ax is not None else plt.gca()
+
+    if not max_weight:
+        max_weight = 2**np.ceil(np.log(np.abs(matrix).max())/np.log(2))
+
+    ax.patch.set_facecolor('lightgray')
+    ax.set_aspect('equal', 'box')
+    ax.xaxis.set_major_locator(plt.NullLocator())
+    ax.yaxis.set_major_locator(plt.NullLocator())
+
+    for (x, y), w in np.ndenumerate(matrix):
+        color = 'red' if w > 0 else 'blue'
+        size = np.sqrt(np.abs(w))
+        rect = plt.Rectangle([x - size / 2, y - size / 2], size, size,
+                             facecolor=color, edgecolor=color)
+        ax.add_patch(rect)
+
+    nticks = matrix.shape[0]
+    ax.xaxis.tick_top()
+    ax.set_xticks(range(nticks))
+    ax.set_xticklabels(list(matrix.columns), rotation=90)
+    ax.set_yticks(range(nticks))
+    ax.set_yticklabels(matrix.columns)
+    ax.grid(False)
+
+    ax.autoscale_view()
+    ax.invert_yaxis()
+
+figsize=(11, 9)
+hinton(corr)
+
+
+# mostlycorrelated
+def mosthighlycorrelated(p, numtoreport):
+    # find the correlations
+    corr = prk.corr()
+    # set the correlations on the diagonal or lower triangle to zero,
+    # so they will not be reported as the highest ones:
+    corr *= np.tri(*corr.values.shape, k=-1).T
+    # find the top n correlations
+    corr = corr.stack()
+    corr = corr.reindex(corr.abs().sort_values(ascending=False).index).reset_index()
+    # assign human-friendly names
+    corr.columns = ["FirstVariable", "SecondVariable", "Correlation"]
+    return corr.head(numtoreport)
+mosthighlycorrelated(p, 20)
+
