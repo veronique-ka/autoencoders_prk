@@ -1,0 +1,82 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+#load data
+prk = pd.read_csv('C:\\Users\\veron\\Documents\\UNIVERSITY\\3 SEMESTER\\PYTHON\\AE\\prk_reord_bin.csv')
+
+#Convert Pandas dataframe to numpy array 
+p=np.array(prk)
+
+#Split into train and test.
+from sklearn.model_selection import train_test_split
+split = train_test_split(p, test_size=0.3)
+train=split[0]
+test=split[1]
+#Autoencoder will be fed with vocal 16 variables
+x_train=train[:,4:20]
+y_train=train[:,20]
+x_test=test[:,4:20]
+y_test=test[:,20]
+
+#Standardize features by removing the mean and scaling to unit variance
+from sklearn.preprocessing import StandardScaler
+scale = StandardScaler()
+x_train = scale.fit_transform(x_train)
+x_test = scale.fit_transform(x_test)
+
+# ______________________________________________________Vanilla AE (1 hidden layer)
+
+from keras.layers import Input, Dense
+from keras.models import Model
+
+# Set the code size of the encoded representation
+encoding_dim=3
+
+# Input placeholder
+input_sample = Input(shape=(16,))
+encoded = Dense(3, activation='sigmoid')(input_sample)
+decoded = Dense(16, activation='sigmoid')(encoded)
+autoencoder = Model(input_sample, decoded)
+autoencoder.summary()
+
+# Compile autoencoder: Optimizer - stochastic gradient descent; loss function - mean squarred error)
+autoencoder.compile(optimizer='sgd', loss='mse')
+
+# Train autoencoder to reconstruct
+history=autoencoder.fit(x_train, x_train,
+                epochs=500,
+                batch_size=64,
+                shuffle=True,
+                validation_data=(x_test, x_test))
+
+# Visualize training process
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+
+# Get a separate model of Encoder and Decoder
+encoder = Model(input_sample, encoded)
+encoded_input = Input(shape=(encoding_dim,))
+decoder_layer = autoencoder.layers[-1]
+decoder = Model(encoded_input, decoder_layer(encoded_input))
+
+# Get a code or encoded representation
+encoded_train=encoder.predict(x_train)
+encoded_test=encoder.predict(x_test)
+
+#Plot encoded features in 3-dim space
+from mpl_toolkits.mplot3d import Axes3D
+fig = plt.figure(figsize=(16,7))
+ax = Axes3D(fig)
+ae=ax.scatter(encoded_train[:, 0], encoded_train[:, 1], encoded_train[:, 2], c=y_train)
+cbar=fig.colorbar(ae)
+
+# Assign labels
+ax.set_xlabel('Feature 1', fontsize=15)
+ax.set_ylabel('Feature 2', fontsize=15)
+ax.set_zlabel('Feature 3', fontsize=15)
+cbar.set_label('total_UPDRS', fontsize = 15)
