@@ -13,7 +13,8 @@ from statistics import median
 start_time = timeit.default_timer()
 
 # Load data
-prk = pd.read_csv('C:\\Users\\veron\\Documents\\UNIVERSITY\\3 SEMESTER\\PYTHON\\AE\\prk_reord_bin.csv')
+url="https://github.com/veronique-ka/autoencoders_prk/blob/master/prk_reord_bin.csv"
+prk = pd.read_csv(url)
 
 #Convert pandas dataframe to numpay array
 p=np.array(prk)
