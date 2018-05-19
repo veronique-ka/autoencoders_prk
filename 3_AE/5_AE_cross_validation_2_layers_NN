@@ -28,7 +28,7 @@ y=p[:,20]
         
 # Normalize values between 0 and 1
 min_max=MinMaxScaler()
-x_train=min_max.fit_transform(x_train)
+x=min_max.fit_transform(x)
 
 # Initiate lists of metrics for test-set, based on 5 iterations
 MSE_test_5 = list()
