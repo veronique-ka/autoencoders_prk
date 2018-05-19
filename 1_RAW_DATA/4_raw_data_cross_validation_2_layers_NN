@@ -32,7 +32,7 @@ MSE_test_5 = list()
 R2_test_5 = list()
 MAE_test_5 = list()
 
-#Initiate 10 itereations for K-folds partitions
+# Initiate 5 itereations for K-folds partitions
 for i in range(0,5):
 
     # Define k-fold validation splits
