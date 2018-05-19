@@ -63,14 +63,14 @@ for i in range(0,10):
     # Get predictions on the test-set
     test_predictions=model.predict(x_test)
     
-    # Calculate Mean squarred error and append result in 10-dim array   
+    # Calculate Mean squarred error and append result to 10-dim array   
     MSE_test_10.append(mean_squared_error(y_test, test_predictions))
     print("MSE_test =", MSE_test_10)
     
-    # Calculate R2 and append result in 10-dim array   
+    # Calculate R2 and append result to 10-dim array   
     R2_test_10.append(r2_score(y_test, test_predictions))
     
-    # Calculate Mean absolute error and append result in 10-dim array
+    # Calculate Mean absolute error and append result to 10-dim array
     MAE_test_10.append(mean_absolute_error(y_test,test_predictions))
     print("MAE=", MAE_test_10)
 
