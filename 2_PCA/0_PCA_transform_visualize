@@ -1,1 +1,63 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 
+
+# Load data
+prk = pd.read_csv("https://raw.githubusercontent.com/veronique-ka/autoencoders_prk/master/prk_reord_bin.csv")
+
+#Convert pandas dataframe to numpay array
+p=np.array(prk)
+
+x=p[:,1:20]
+y=p[:,20]
+
+#Standardize features by removing the mean and scaling to unit variance
+scale = StandardScaler()
+x = scale.fit_transform(x)
+
+# PCA data transformation. Total 19 components 
+pca = PCA(n_components = 19)
+pca.fit(x)
+pca_train=pca.transform(x)
+
+# Plot variance explained
+var=np.cumsum(np.round(pca.explained_variance_ratio_, decimals=4)*100)
+plt.xlabel("Number of PC")
+plt.ylabel("Cumulative proportion of variance explained")
+plt.xticks([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19])
+plt.plot(var)
+
+print("\nComponents:\n", pca.components_)
+print("\Explained Variance:\n", pca.explained_variance_)
+print("\Explained Variance in %\n", pca.explained_variance_ratio_)
+print("\Covariance matrix", pca.get_covariance())
+
+# # PCA data transformation. 3 components
+pca = PCA(n_components = 3)
+pca.fit(x)
+pca_train=pca.transform(x)
+
+
+
+
+# Print PCA 1 PCA2# Print 3 PCA in 3D
+from mpl_toolkits.mplot3d import Axes3D
+fig = plt.figure(figsize=(16,7))
+ax = Axes3D(fig)
+p=ax.scatter(pca_train[:, 0], pca_train[:, 1], pca_train[:, 2], c=y2)
+ax.set_xlim3d(-5,25)
+ax.set_ylim3d(-5,25)
+ax.set_zlim3d(-5,5)
+cbar=fig.colorbar(p, aspect=20)
+
+# Labels
+ax.set_xlabel('PC1', fontsize=20)
+ax.set_ylabel('PC2', fontsize=20)
+ax.set_zlabel('PC3', fontsize=20)
+cbar.set_label('motor_UPDRS', fontsize = 20)
+plt.scatter(pca_train[:,0],pca_train[:,2])
+plt.xlabel("PCA1")
+plt.ylabel("PCA2")
