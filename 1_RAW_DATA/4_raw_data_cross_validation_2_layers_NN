@@ -27,13 +27,12 @@ from sklearn.preprocessing import StandardScaler
 scale = StandardScaler()
 x = scale.fit_transform(x)
 
-
-#Initialise the lists of metrics for test-set, based on 5 iterations
+#Initiate lists of metrics for test-set, based on 5 iterations
 MSE_test_5 = list()
 R2_test_5 = list()
 MAE_test_5 = list()
 
-# initialise 10 itereations for K-folds partitions
+#Initiate 10 itereations for K-folds partitions
 for i in range(0,5):
 
     # Define k-fold validation splits
