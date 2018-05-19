@@ -41,6 +41,8 @@ for i in range(0,30):
     # Multiple regression model    
     lr = LinearRegression(fit_intercept=True, normalize=False, copy_X=True, n_jobs=1)
     lr.fit(x_train, y_train)
+    
+    # Predict with regression model
     test_predictions = lr.predict(x_test)
     
     # Calculate Mean squarred error and append result to 30-dim array   
