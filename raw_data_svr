@@ -13,8 +13,7 @@ from statistics import median
 start_time = timeit.default_timer()
 
 # Load data
-url="https://github.com/veronique-ka/autoencoders_prk/blob/master/prk_reord_bin.csv"
-prk = pd.read_csv(url)
+prk = pd.read_csv("https://raw.githubusercontent.com/veronique-ka/autoencoders_prk/master/prk_reord_bin.csv")
 
 #Convert pandas dataframe to numpay array
 p=np.array(prk)
@@ -40,7 +39,7 @@ for i in range(0,30):
     x_test = scale.fit_transform(x_test)
     
     # Support vector regression model
-    sv = SVR(kernel=’rbf’, degree=3, gamma=’auto’, coef0=0.0, tol=0.001, C=1.0, epsilon=0.1, shrinking=True, cache_size=200, verbose=False, max_iter=-1)
+    sv = SVR(kernel="rbf", degree=3, gamma="auto", coef0=0.0, tol=0.001, C=1.0, epsilon=0.1, shrinking=True, cache_size=200, verbose=False, max_iter=-1)
     sv.fit(x_train, y_train)
     test_predictions = sv.predict(x_test)
     
@@ -68,4 +67,3 @@ end_time = timeit.default_timer()
 hours, rem = divmod(end_time-start_time, 3600)
 minutes, seconds = divmod(rem, 60)
 print ("{:0>2}:{:0>2}:{:05.2f}".format(int(hours),int(minutes),seconds))
-    
