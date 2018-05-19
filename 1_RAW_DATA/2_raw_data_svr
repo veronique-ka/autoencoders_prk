@@ -41,6 +41,8 @@ for i in range(0,30):
     # Support vector regression model
     sv = SVR(kernel="rbf", degree=3, gamma="auto", coef0=0.0, tol=0.001, C=1.0, epsilon=0.1, shrinking=True, cache_size=200, verbose=False, max_iter=-1)
     sv.fit(x_train, y_train)
+    
+    # Predict with SVR model
     test_predictions = sv.predict(x_test)
     
     # Calculate Mean squarred error and append result to 30-dim array   
