@@ -86,7 +86,7 @@ for i in range(0,10):
             # Predict values for each k-validation subset
             valid_predictions=model.predict(x_valid_cv)
             
-            # Get metrics' values for each fold and append them in 10-dim array (10 folds)
+            # Get metrics' values for each fold and append them to 10-dim array (10 folds)
             MSE_valid_folds.append(mean_squared_error(y_valid_cv, valid_predictions))
             R2_valid_folds.append(r2_score(y_valid_cv, valid_predictions))
             MAE_valid_folds.append(mean_absolute_error(y_valid_cv,valid_predictions))
@@ -95,7 +95,7 @@ for i in range(0,10):
     print("R2_valid=", R2_valid_folds) 
     print("MAE_valid=", MAE_valid_folds)
     
-    # Calculate median-average of metrics from 10 folds and append to the 10-dim array (10 trials)
+    # Calculate median-average of metrics from 10 folds and append to 10-dim array (10 trials)
     MSE_10.append(median(MSE_valid_folds))
     R2_10.append(median(R2_valid_folds))
     MAE_10.append(median(MAE_valid_folds))
