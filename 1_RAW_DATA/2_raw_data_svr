@@ -45,14 +45,15 @@ for i in range(0,30):
     
     # Calculate Mean squarred error and append result to 30-dim array   
     MSE_test_30.append(mean_squared_error(y_test, test_predictions))
-    print("MSE_test =", MSE_test_30)
+    print("MSE_test_30 =", MSE_test_30)
     
     # Calculate R2 and append result to 30-dim array   
     R2_test_30.append(r2_score(y_test, test_predictions))
-    
+    print("R2_test_30 =", R2_test_30)
+
     # Calculate Mean absolute error and append to 30-dim array
     MAE_test_30.append(mean_absolute_error(y_test,test_predictions))
-    print("MAE=", MAE_test_30)
+    print("MAE_test_30=", MAE_test_30)
 
 #Calculate median of 30 trials
 MSE_final=median(MSE_test_30)
