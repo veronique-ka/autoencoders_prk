@@ -16,7 +16,7 @@ from statistics import median
 start_time = timeit.default_timer()
 
 # Load data
-prk = pd.read_csv('C:\\Users\\veron\\Documents\\UNIVERSITY\\3 SEMESTER\\PYTHON\\AE\\prk_reord_bin.csv')
+prk = pd.read_csv("https://raw.githubusercontent.com/veronique-ka/autoencoders_prk/master/prk_reord_bin.csv")
 
 #Convert pandas dataframe to numpay array
 p=np.array(prk)
@@ -43,7 +43,7 @@ for i in range(0,10):
     
     # 20-NN model
     model=Sequential()
-    model.add(Dense(20,input_dim=16,activation="sigmoid"))
+    model.add(Dense(20,input_dim=19,activation="sigmoid"))
     model.add(Dense(1,init='normal', activation="linear"))
     sgd = SGD(0.01)
     model.compile(loss='mse', optimizer=sgd)
