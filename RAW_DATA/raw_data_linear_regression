@@ -13,7 +13,7 @@ from statistics import median
 start_time = timeit.default_timer()
 
 # Load data
-prk = pd.read_csv('C:\\Users\\veron\\Documents\\UNIVERSITY\\3 SEMESTER\\PYTHON\\AE\\prk_reord_bin.csv')
+prk = pd.read_csv("https://raw.githubusercontent.com/veronique-ka/autoencoders_prk/master/prk_reord_bin.csv")
 
 #Convert pandas dataframe to numpay array
 p=np.array(prk)
@@ -43,14 +43,14 @@ for i in range(0,30):
     lr.fit(x_train, y_train)
     test_predictions = lr.predict(x_test)
     
-    # Calculate Mean squarred error and append result in 30-dim array   
+    # Calculate Mean squarred error and append result to 30-dim array   
     MSE_test_30.append(mean_squared_error(y_test, test_predictions))
     print("MSE_test =", MSE_test_30)
     
-    # Calculate R2 and append result in 30-dim array   
+    # Calculate R2 and append result to 30-dim array   
     R2_test_30.append(r2_score(y_test, test_predictions))
     
-    # Calculate Mean absolute error
+    # Calculate Mean absolute error and append to 30-dim array
     MAE_test_30.append(mean_absolute_error(y_test,test_predictions))
     print("MAE=", MAE_test_30)
 
