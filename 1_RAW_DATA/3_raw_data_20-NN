@@ -51,6 +51,8 @@ for i in range(0,10):
     
     # Train model
     history=model.fit(x_train,y_train, batch_size=64, nb_epoch=200, validation_data=(x_test, y_test), verbose=1)
+    
+    # Visualize training process
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
     plt.title('model loss')
