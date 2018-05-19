@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 #Load data
-prk = pd.read_csv('C:\\Users\\veron\\Documents\\UNIVERSITY\\3 SEMESTER\\PYTHON\\AE\\prk_reord_bin.csv')
+prk = pd.read_csv("https://raw.githubusercontent.com/veronique-ka/autoencoders_prk/master/prk_reord_bin.csv")
+
+# Convert pandas Data frame into numpay array
 p=np.array(prk)
 
 #Dataset summary
