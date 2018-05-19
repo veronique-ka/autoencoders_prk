@@ -28,13 +28,13 @@ scale = StandardScaler()
 x = scale.fit_transform(x)
 
 
-#Initialise the lists of metrics, based on 10 iterations
-MSE_10 = list()
-R2_10 = list()
-MAE_10 = list()
+#Initialise the lists of metrics for test-set, based on 5 iterations
+MSE_test_5 = list()
+R2_test_5 = list()
+MAE_test_5 = list()
 
 # initialise 10 itereations for K-folds partitions
-for i in range(0,10):
+for i in range(0,5):
 
     # Define k-fold validation splits
     def load_data_kfold(k):              
@@ -86,7 +86,7 @@ for i in range(0,10):
             # Predict values for each k-validation subset
             valid_predictions=model.predict(x_valid_cv)
             
-            # Get metrics' values for each fold and append them to 10-dim array (10 folds)
+            # Calculate metrics for each fold and append them to 10-dim array (10 folds)
             MSE_valid_folds.append(mean_squared_error(y_valid_cv, valid_predictions))
             R2_valid_folds.append(r2_score(y_valid_cv, valid_predictions))
             MAE_valid_folds.append(mean_absolute_error(y_valid_cv,valid_predictions))
@@ -95,21 +95,21 @@ for i in range(0,10):
     print("R2_valid=", R2_valid_folds) 
     print("MAE_valid=", MAE_valid_folds)
     
-    # Calculate median-average of metrics from 10 folds and append to 10-dim array (10 trials)
-    MSE_10.append(median(MSE_valid_folds))
-    R2_10.append(median(R2_valid_folds))
-    MAE_10.append(median(MAE_valid_folds))
+    # Calculate median-average of metrics from 10 folds and append to 5-dim array (5 trials)
+    MSE_test_5.append(median(MSE_valid_folds))
+    R2_test_5.append(median(R2_valid_folds))
+    MAE_test_5.append(median(MAE_valid_folds))
 
-print("MSE_10 =", MSE_10)
-print("R2_10 =", R2_10) 
-print("MAE_10=", MAE_10) 
+print("MSE_test_5 =", MSE_test_5)
+print("R2_test_5 =", R2_test_5) 
+print("MAE_test_5 =", MAE_test_5) 
    
-# Calculate median-average of metrics from 10 trials 
-MSE_final=median(MSE_10)
+# Calculate median-average of metrics from 5 trials 
+MSE_final=median(MSE_test_5)
 print(MSE_final)
-R2_final=median(R2_10)
+R2_final=median(R2_test_5)
 print(R2_final)
-MAE_final=median(MAE_10)
+MAE_final=median(MAE_test_5)
 print(MAE_final)
 
 # Calculate total time of algorithm running
