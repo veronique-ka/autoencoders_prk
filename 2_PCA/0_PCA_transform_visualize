@@ -11,43 +11,47 @@ prk = pd.read_csv("https://raw.githubusercontent.com/veronique-ka/autoencoders_p
 #Convert pandas dataframe to numpay array
 p=np.array(prk)
 
-x=p[:,1:20]
+# Extract 16 vocal variables
+x=p[:,4:20]
 y=p[:,20]
 
 #Standardize features by removing the mean and scaling to unit variance
 scale = StandardScaler()
 x = scale.fit_transform(x)
 
-# PCA data transformation. Total 19 components 
-pca = PCA(n_components = 19)
+# PCA data transformation. 16 components
+pca = PCA(n_components = 16)
 pca.fit(x)
-pca_train=pca.transform(x)
+pca_transformed=pca.transform(x)
 
 # Plot variance explained
 var=np.cumsum(np.round(pca.explained_variance_ratio_, decimals=4)*100)
 plt.xlabel("Number of PC")
 plt.ylabel("Cumulative proportion of variance explained")
-plt.xticks([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19])
+plt.xticks([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16])
 plt.plot(var)
 
+# Print the orthogonal basis (loadings) of the space of a shape (n_components X n_vars)=(16x16) the data is projected into
 print("\nComponents:\n", pca.components_)
+# Print Eigen values of each component
 print("\Explained Variance:\n", pca.explained_variance_)
+# Print explained variance of each component
 print("\Explained Variance in %\n", pca.explained_variance_ratio_)
+# Print cumulative explained variance
+print("\Explained Variance in %\n", pca.explained_variance_ratio_.cumsum())
+# Print computed data covariance with the generative model.
 print("\Covariance matrix", pca.get_covariance())
 
-# # PCA data transformation. 3 components
+# PCA data transformation. 3 components
 pca = PCA(n_components = 3)
 pca.fit(x)
-pca_train=pca.transform(x)
+pca_transformed=pca.transform(x)
 
-
-
-
-# Print PCA 1 PCA2# Print 3 PCA in 3D
+# Plot 3 PCA  in 3-dim space, where colour is a level of UPRS_score (target)
 from mpl_toolkits.mplot3d import Axes3D
 fig = plt.figure(figsize=(16,7))
 ax = Axes3D(fig)
-p=ax.scatter(pca_train[:, 0], pca_train[:, 1], pca_train[:, 2], c=y2)
+p=ax.scatter(pca_transformed[:, 0], pca_transformed[:, 1], pca_transformed[:, 2], c=y)
 ax.set_xlim3d(-5,25)
 ax.set_ylim3d(-5,25)
 ax.set_zlim3d(-5,5)
@@ -58,6 +62,3 @@ ax.set_xlabel('PC1', fontsize=20)
 ax.set_ylabel('PC2', fontsize=20)
 ax.set_zlabel('PC3', fontsize=20)
 cbar.set_label('motor_UPDRS', fontsize = 20)
-plt.scatter(pca_train[:,0],pca_train[:,2])
-plt.xlabel("PCA1")
-plt.ylabel("PCA2")
