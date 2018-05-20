@@ -33,9 +33,9 @@ for i in range(0,10):
     split = train_test_split(p, test_size=0.3)
     train=split[0]
     test=split[1]
-    x_train=train[:,1:20]
+    x_train=train[:,4:20]
     y_train=train[:,20]
-    x_test=test[:,1:20]
+    x_test=test[:,4:20]
     y_test=test[:,20]
     
     # normalize values between 0 and 1 and
@@ -50,10 +50,10 @@ for i in range(0,10):
     encoding_dim=3
     
     # Input placeholder
-    input_sample = Input(shape=(19,))
+    input_sample = Input(shape=(16,))
     # Define AE architecture
     encoded = Dense(3, activation='sigmoid')(input_sample)
-    decoded = Dense(19, activation='sigmoid')(encoded)
+    decoded = Dense(16, activation='sigmoid')(encoded)
     autoencoder = Model(input_sample, decoded)
     # Return architecture of AE
     autoencoder.summary()
