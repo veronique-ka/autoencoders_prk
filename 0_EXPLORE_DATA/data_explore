@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from string import ascii_letters
 
 #Load data
 prk = pd.read_csv("https://raw.githubusercontent.com/veronique-ka/autoencoders_prk/master/prk_reord_bin.csv")
@@ -9,16 +10,21 @@ prk = pd.read_csv("https://raw.githubusercontent.com/veronique-ka/autoencoders_p
 # Convert pandas Data frame into numpay array
 p=np.array(prk)
 
-#Dataset summary
+#Dataset summary: number observation, missing values, data type
 prk.info()
 
 # del subject and motor_updrs columns
 p=prk.drop("subject#",  axis=1)
 p=p.drop("motor_UPDRS", axis=1) 
 
-
+# Basic statistics: max-min, mean, st_dev, quartiles
 prk.describe()
+
+# Min-max
 prk.min()
+prk.max()
+
+# 2-dim plot: each variable and target variable 
 plt.scatter(prk["age"],prk["total_UPDRS"])
 plt.scatter(prk["test_time"],prk["total_UPDRS"])
 plt.scatter(prk["Jitter(%)"],prk["total_UPDRS"])
@@ -38,9 +44,7 @@ plt.scatter(prk["RPDE"],prk["total_UPDRS"])
 plt.scatter(prk["DFA"],prk["total_UPDRS"])
 plt.scatter(prk["PPE"],prk["total_UPDRS"])
 
-# Outliers
-    
-import seaborn as sns
+# Visualize univariate distribution
 sns.distplot(prk["age"])
 sns.distplot(prk["age"], bins=1)
 sns.distplot(prk["test_time"])
@@ -61,10 +65,12 @@ sns.distplot(prk["DFA"])
 sns.distplot(prk["PPE"])
 sns.distplot(prk["total_UPDRS"])
 
-import matplotlib.pyplot as plt
+# Count values of a binary variable
 sex=sns.countplot(prk["sex"])
-show(sex)
 
+# Visualize box-plots to show the distribution of data to identify outliers.
+# The box shows the quartiles of the dataset while the whiskers - the rest of the distribution, 
+# except for points that are determined to be “outliers” using a method that is a function of the inter-quartile range.
 sns.boxplot(prk["age"])
 sns.boxplot(prk["test_time"])
 sns.boxplot(prk["Jitter(%)"])
@@ -84,7 +90,7 @@ sns.boxplot(prk["DFA"])
 sns.boxplot(prk["PPE"])
 sns.boxplot(prk["total_UPDRS"])
 
-from string import ascii_letters
+
 import numpy as np
 import pandas as pd
 import seaborn as sns
