@@ -28,9 +28,9 @@ for i in range(0,30):
     split = train_test_split(p, test_size=0.3)
     train=split[0]
     test=split[1]
-    x_train=train[:,1:20]
+    x_train=train[:,4:20]
     y_train=train[:,20]
-    x_test=test[:,1:20]
+    x_test=test[:,4:20]
     y_test=test[:,20]
     
     #Standardize features by removing the mean and scaling to unit variance
