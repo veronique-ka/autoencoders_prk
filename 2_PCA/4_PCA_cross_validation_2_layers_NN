@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split, StratifiedKFold
@@ -82,13 +83,21 @@ for i in range(0,5):
             
             # Train the model for each partition
             model = get_model()
-            model.fit(x_train_cv,y_train_cv, 
+            history=model.fit(x_train_cv,y_train_cv, 
                         batch_size=64, 
                         nb_epoch=200, 
                         verbose=1,
                         shuffle=True,
                         validation_data = (x_valid_cv, y_valid_cv))
-                        
+            # Visualize training process
+            plt.plot(history.history['loss'])
+            plt.plot(history.history['val_loss'])
+            plt.title('model loss')
+            plt.ylabel('loss')
+            plt.xlabel('epoch')
+            plt.legend(['train', 'test'], loc='upper left')
+            plt.show()
+            
             # Predict values for each k-validation subset
             valid_predictions=model.predict(x_valid_cv)
             
