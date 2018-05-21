@@ -23,7 +23,7 @@ prk = pd.read_csv("https://raw.githubusercontent.com/veronique-ka/autoencoders_p
 #Convert pandas dataframe to numpay array
 p=np.array(prk)
 
-x=p[:,4:20]
+x=p[:,1:20]
 y=p[:,20]
         
 # Normalize values between 0 and 1
