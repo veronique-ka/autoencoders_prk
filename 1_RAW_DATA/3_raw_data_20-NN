@@ -31,9 +31,9 @@ for i in range(0,10):
     split = train_test_split(p, test_size=0.3)
     train=split[0]
     test=split[1]
-    x_train=train[:,1:20]
+    x_train=train[:,4:20]
     y_train=train[:,20]
-    x_test=test[:,1:20]
+    x_test=test[:,4:20]
     y_test=test[:,20]
     
     #Standardize features by removing the mean and scaling to unit variance
@@ -43,7 +43,7 @@ for i in range(0,10):
     
     # 20-NN model
     model=Sequential()
-    model.add(Dense(20,input_dim=19,activation="sigmoid"))
+    model.add(Dense(20,input_dim=16,activation="sigmoid"))
     model.add(Dense(1,init='normal', activation="linear"))
     sgd = SGD(0.01)
     model.compile(loss='mse', optimizer=sgd)
