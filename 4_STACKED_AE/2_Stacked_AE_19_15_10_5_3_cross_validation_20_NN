@@ -121,7 +121,7 @@ for i in range(0,5):
         model.summary()
     
         # Train model
-        history=model.fit(x_train_cvcv, y_train_cv, batch_size=64, nb_epoch=200, validation_data=(x_test, y_test))
+        history=model.fit(x_train_cv, y_train_cv, batch_size=64, nb_epoch=200, validation_data=(x_valid_cv, y_valid_cv))
     
         # Visualize training process
         plt.plot(history.history['loss'])
@@ -131,8 +131,8 @@ for i in range(0,5):
         plt.legend(['train', 'test'], loc='upper left')
         plt.show()
 
-        # Get predictions on the test-set by the entire structure
-        test_predictions=model.predict(x_valid_cv)
+        # Get predictions on the valid-subset by the entire deep model
+        valid_predictions=model.predict(x_valid_cv)
     
         # Calculate metrics for each fold and append them to 10-dim array (10 folds)
         MSE_valid_folds.append(mean_squared_error(y_valid_cv, valid_predictions))
