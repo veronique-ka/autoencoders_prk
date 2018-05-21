@@ -69,8 +69,6 @@ sns.distplot(prk["total_UPDRS"])
 sex=sns.countplot(prk["sex"])
 
 # Visualize box-plots to show the distribution of data to identify outliers.
-# The box shows the quartiles of the dataset while the whiskers - the rest of the distribution, 
-# except for points that are determined to be “outliers” using a method that is a function of the inter-quartile range.
 sns.boxplot(prk["age"])
 sns.boxplot(prk["test_time"])
 sns.boxplot(prk["Jitter(%)"])
@@ -90,12 +88,11 @@ sns.boxplot(prk["DFA"])
 sns.boxplot(prk["PPE"])
 sns.boxplot(prk["total_UPDRS"])
 
+# Correlation matrixes
 
-import numpy as np
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
+# Correlation matrix_Option1 (source: https://seaborn.pydata.org/examples/many_pairwise_correlations.html)
 
+# Define style
 sns.set(style="white")
 
 # Generate a large random dataset
@@ -120,52 +117,20 @@ cmap = sns.diverging_palette(220, 10, as_cmap=True)
 sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
             square=True, linewidths=.5, cbar_kws={"shrink": .5})
 
-#correlation option 1
-from string import ascii_letters
-import numpy as np
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 
-sns.set(style="white")
 
-# Compute the correlation matrix
-corr = prk.corr()
-
-# Generate a mask for the upper triangle
-mask = np.zeros_like(corr, dtype=np.bool)
-mask[np.triu_indices_from(mask)] = True
-
-# Set up the matplotlib figure
-f, ax = plt.subplots(figsize=(11, 9))
-
-# Generate a custom diverging colormap
-cmap = sns.diverging_palette(500, 20, as_cmap=True)
-
-# Draw the heatmap with the mask and correct aspect ratio
-sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
-            square=True, linewidths=.5, cbar_kws={"shrink": .5})
-
-# corr option 2
-import seaborn as sns
+# Correlation matrix_Option2
 corr = prk.corr()
 plt.subplots(figsize=(11, 9))
 sns.heatmap(corr, 
             xticklabels=corr.columns.values,
             yticklabels=corr.columns.values)
+            
+            
 
-# corr option 3
-sns.heatmap(corr, vmax=1., square=False).xaxis.tick_()
+# Correlation matrix_Option3
+# Hinton corrrlation matrix (Source: http://python-for-multivariate-analysis.readthedocs.io/a_little_book_of_python_for_multivariate_analysis.html
 
-print(corr)
-
-p1=p.loc[:, "age":"Jitter(%)"]
-pd.tools.plotting.scatter_matrix(p1, diagonal="kde")
-plt.tight_layout()
-plt.show()
-
-# hinton corr
-# adapted from http://matplotlib.org/examples/specialty_plots/hinton_demo.html
 def hinton(matrix, max_weight=None, ax=None):
     """Draw Hinton diagram for visualizing a weight matrix."""
     ax = ax if ax is not None else plt.gca()
@@ -200,7 +165,8 @@ figsize=(11, 9)
 hinton(corr)
 
 
-# mostlycorrelated
+
+# Get Top-10 mostly correlated variables
 def mosthighlycorrelated(p, numtoreport):
     # find the correlations
     corr = prk.corr()
@@ -213,5 +179,5 @@ def mosthighlycorrelated(p, numtoreport):
     # assign human-friendly names
     corr.columns = ["FirstVariable", "SecondVariable", "Correlation"]
     return corr.head(numtoreport)
-mosthighlycorrelated(p, 20)
+mosthighlycorrelated(p, 10)
 
