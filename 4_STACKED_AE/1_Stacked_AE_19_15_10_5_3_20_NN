@@ -91,7 +91,8 @@ for i in range(0,10):
         
     # Fine-turning
     model = Sequential()
-    # Get a sequense of all pre-trained encoders into a deep structure
+    # Get a sequence of all pre-trained encoders and put into a deep structure
+
     for encoder in encoders:
         model.add(encoder)
     # Add supervised model by attaching 20-NN where input is a product of training Deep structure
