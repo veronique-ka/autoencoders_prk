@@ -1,0 +1,138 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
+from keras.layers import Input, Dense
+from keras.models import Model
+from keras.models import Sequential
+
+# Load data
+prk = pd.read_csv("https://raw.githubusercontent.com/veronique-ka/autoencoders_prk/master/prk_reord_bin.csv")
+
+#Convert pandas dataframe to numpay array
+p=np.array(prk)
+
+#split into train and test
+split = train_test_split(p, test_size=0.3)
+train=split[0]
+test=split[1]
+x_train=train[:,1:20]
+y_train=train[:,20]
+x_test=test[:,1:20]
+y_test=test[:,20]
+
+# Normalize values between 0 and 1 and
+min_max=MinMaxScaler()
+x_train=min_max.fit_transform(x_train)
+x_test=min_max.fit_transform(x_test)
+
+# Start Layer-wise pretraining
+
+# Initiate list of separate deep Encoder
+encoders = []
+
+# Define architecture
+nb_hidden_layers = [19,15,10,5,3]
+# Copy data to temporary datasets 
+x_train_tmp = np.copy(x_train)
+x_test_tmp = np.copy(x_test)
+
+# Start layer-wise training by interacting each pair of layers within a deep structure 
+for j, (n_in, n_out) in enumerate(zip(nb_hidden_layers[:-1], nb_hidden_layers[1:]), start=1):
+    # Print numbers of layers being trained
+    print('Training the layer {}: Input {} -> Output {}'.format(j, n_in, n_out))  
+
+    # Create vanilla AE between each pair of layers        
+    inputs = Input(shape=(n_in,))
+    encoded = Dense(n_out, activation='sigmoid')(inputs)
+    decoded = Dense(n_in, activation='sigmoid')(encoded)
+    autoencoder = Model(inputs, decoded)
+    autoencoder.summary()
+
+    # Compile AE
+    autoencoder.compile(loss='binary_crossentropy', optimizer='adam')
+    
+    # Train AE to reconstruct
+    autoencoder.fit(x_train_tmp, x_train_tmp, batch_size=64, nb_epoch=200, validation_data=(x_test_tmp, x_test_tmp))
+    
+    # Store trainined weights and update training data
+    encoders.append(autoencoder.layers[0])
+    
+    # Get a separate model of Encoder
+    encoder = Model(inputs, encoded)
+    
+    # Get a code or encoded representation in a pair of layers
+    encoded_train=encoder.predict(x_train_tmp)
+    encoded_test=encoder.predict(x_test_tmp)
+    
+    # Assign encoded representation to the input for the next layer to start loop
+    x_train_tmp = encoded_train 
+    x_test_tmp = encoded_test
+         
+    
+# Fine-turning
+model = Sequential()
+
+# Get a sequence of all pre-trained encoders and put into a deep structure
+for encoder in encoders:
+    model.add(encoder)
+# Add supervised model by attaching 20-NN where input is a product of training Deep structure
+model.add(Dense(nb_hidden_layers[-1], activation='sigmoid'))
+model.add(Dense(1, activation="linear"))
+model.compile(loss='mse', optimizer="sgd")
+
+model.summary()
+
+# Train model
+history=model.fit(x_train, y_train, batch_size=64, nb_epoch=200, validation_data=(x_test, y_test))
+
+# Visualize training process
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+
+# Get a separate model of Encoder after fine tuning 
+encoder_ft= Sequential()
+for encoder in encoders:
+    encoder_ft.add(encoder)
+encoder_ft.add(Dense(nb_hidden_layers[-1], activation='sigmoid'))
+
+encoder_ft.summary()
+
+# Get a code or encoded representation obtained by training deep AE and fine tuning
+encoded_ft_train=encoder_ft.predict(x_train)
+encoded_ft_test=encoder_ft.predict(x_test)
+
+
+# plot encoded 3D for training subset
+# 3D F1, F2, F3
+from mpl_toolkits.mplot3d import Axes3D
+fig = plt.figure(figsize=(16,7))
+ax = Axes3D(fig)
+ae=ax.scatter(encoded_train[:, 0], encoded_train[:, 1], encoded_train[:, 2], c=y_train)
+cbar=fig.colorbar(ae)
+
+# Labels
+ax.set_xlabel('Feature 1', fontsize=15)
+ax.set_ylabel('Feature 2', fontsize=15)
+ax.set_zlabel('Feature 3', fontsize=15)
+cbar.set_label('total_UPDRS', fontsize = 15)
+
+# plot encoded 3D for test subset
+# 3D F1, F2, F3
+from mpl_toolkits.mplot3d import Axes3D
+fig = plt.figure(figsize=(16,7))
+ax = Axes3D(fig)
+ae=ax.scatter(encoded_test[:, 0], encoded_test[:, 1], encoded_test[:, 2], c=y_test)
+cbar=fig.colorbar(ae)
+
+# Labels
+ax.set_xlabel('Feature 1', fontsize=15)
+ax.set_ylabel('Feature 2', fontsize=15)
+ax.set_zlabel('Feature 3', fontsize=15)
+cbar.set_label('total_UPDRS', fontsize = 15)
+
