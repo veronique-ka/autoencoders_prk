@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 from keras.layers import Input, Dense
 from keras.models import Model
 
@@ -23,10 +23,10 @@ y_train=train[:,20]
 x_test=test[:,4:20]
 y_test=test[:,20]
 
-# Standardize features by removing the mean and scaling to unit variance
-scale = StandardScaler()
-x_train = scale.fit_transform(x_train)
-x_test = scale.fit_transform(x_test)
+# Normalize values between 0 and 1 and
+min_max=MinMaxScaler()
+x_train=min_max.fit_transform(x_train)
+x_test=min_max.fit_transform(x_test)
 
 #Vanilla AE (1 hidden layer)
 
