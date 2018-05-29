@@ -42,11 +42,11 @@ autoencoder = Model(input_sample, decoded)
 autoencoder.summary()
 
 # Compile autoencoder: Optimizer - stochastic gradient descent; loss function - mean squarred error)
-autoencoder.compile(optimizer='sgd', loss='mse')
+autoencoder.compile(optimizer='adam', loss='binary_crossentropy')
 
 # Train autoencoder to reconstruct
 history=autoencoder.fit(x_train, x_train,
-                epochs=500,
+                epochs=200,
                 batch_size=64,
                 shuffle=True,
                 validation_data=(x_test, x_test))
